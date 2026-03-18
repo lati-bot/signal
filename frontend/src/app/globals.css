@@ -10,3 +10,52 @@ body {
 ::selection {
   background-color: #e8dcc8;
 }
+
+/* Factor sliders — custom styled to avoid generic look */
+.factor-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #e8e2d9;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.factor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid #faf8f5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+.factor-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.factor-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+.factor-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid #faf8f5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: grab;
+}
+
+.factor-slider::-moz-range-track {
+  height: 6px;
+  background: #e8e2d9;
+  border-radius: 3px;
+}

@@ -1,0 +1,192 @@
+[
+  {
+    "condition_id": "0xe26441eb71188ad8ff5b0ec4b377345caaec861e999b40a09597f7cf9d472aee",
+    "question": "Exact Score: RC Celta de Vigo 1 - 2 Deportivo Alav\u00e9s?",
+    "description": "In the upcoming La Liga game between RC Celta de Vigo and Deportivo Alav\u00e9s, scheduled for March 22, 2026 at 11:15 AM ET: This market will resolve based on the final score of the RC Celta de Vigo vs. Deportivo Alav\u00e9s match originally scheduled for March 22, 2026 at 11:15 AM ET, considering only the result at the end of 90 minutes of regulation plus stoppage time; extra time and penalty shoot-outs are excluded. If the actual score is not one of the explicitly listed outcomes, the market resolves to \"Any Other Score.\" If the match is postponed, the market will remain open until it is completed; if it is canceled with no make-up game, the market resolves to \"0-0.\" The primary resolution source for this market will be the official statistics of the event as recognized by the governing body or event organizers. However, if final official statistics are not published within 2 hours after the event's conclusion, a consensus of credible reporting may be used instead.",
+    "category": "",
+    "image_url": null,
+    "url": "https://polymarket.com/event/lal-cel-ala-2026-03-22-exact-score-1-2",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.08,
+      0.92
+    ],
+    "volume": 99.98,
+    "end_date": "2026-03-22T15:15:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0x70bd9bdcb09c9d58ce2f8be43174dbebf09af7385e44ee37420527607d637592",
+    "question": "Will Israel take military action in Lebanon on March 18, 2026?",
+    "description": "This market will resolve to \"Yes\" if Israel initiates a drone, missile, or air strike on Lebanese soil on the listed date Israel Standard Time (IST). Otherwise, this market will resolve to \"No\".\n\nFor the purposes of this market, a qualifying \"military action\" is defined as the use of aerial bombs, drones, or missiles (including cruise or ballistic missiles) launched by Israeli military forces that impact Lebanese ground territory.\n\nA strike on any area within the terrestrial territory of Lebanon counts, including buffer zones.\n\nMissiles or drones that are intercepted and surface-to-air missile strikes will not be sufficient for a \"Yes\" resolution, regardless of whether they land on Lebanese territory or cause damage.\n\nActions such as artillery fire, small arms fire, FPV or ground based ATGM strikes, ground incursions, naval shelling, cyberattacks, or other operations conducted by Israeli ground operatives will not qualify.\n\nThe primary resolution source will be official government/military statements (Israeli or foreign), multilateral bodies (UN, etc.), or a consensus of credible reporting from major international media and national broadcasters/newspapers.\n\nIf the date/time of a strike cannot be confirmed by a consensus of credible reporting by the end of the third calendar date after this market's end date, it will resolve to \"No\" regardless of whether a strike was later confirmed to have taken place.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-israel-strike-lebanon-on-431-QKZtCmgXI6x8.jpg",
+    "url": "https://polymarket.com/event/will-israel-take-military-action-in-lebanon-on-march-18-2026",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.5775,
+      0.4225
+    ],
+    "volume": 998.997666,
+    "end_date": "2026-03-31T00:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0x12d15625a488ea9a3185aeff49b42f0c8c9dbc8d0097ef208158a6ab646ead6a",
+    "question": "Will Venezuela win the 2026 World Baseball Classic?",
+    "description": "This market will resolve to the team that wins the 2026 World Baseball Classic (WBC). \n\nIf at any point it becomes impossible for a listed team to win the 2026 WBC per the rules of the tournament (e.g., they are eliminated in the playoffs), the corresponding market will resolve to \u201cNo\u201d.\n\nIf the 2026 WBC tournament is cancelled, postponed after March 31, 2026 ET, or there is otherwise no winner declared within that timeframe, this market will resolve to \u201cOther\u201d.\n\nThe primary resolution source will be official information from the tournament organizer (https://www.mlb.com/world-baseball-classic); however, a consensus of credible reporting may also be used.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/wbc-winner-2026-J4uYpRdaq3T4.jpg",
+    "url": "https://polymarket.com/event/will-venezuela-win-the-2026-world-baseball-classic",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.4125,
+      0.5875
+    ],
+    "volume": 998823.7973590009,
+    "end_date": "2026-03-17T23:55:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0x7452216a57a3bef85439820c7bb421fa38e5a5ecff8c43658de515c1df70151e",
+    "question": "Will Romeu Zema finish in third place in the first round of the 2026 Brazilian presidential election?",
+    "description": "A presidential election is scheduled to take place in Brazil on October 4, 2026.\n\nThis market will resolve according to the listed candidate who receives the third-most valid votes in the first round of this election.\n\nThe named candidates will be primarily ranked by the number of valid votes received in the specified election. If two or more candidates are tied on valid votes, ties will be broken by alphabetical order of the candidates' last names. This market will resolve to the candidate that occupies the third-highest finishing position after applying this ranking.\n\nIf the result of this election isn't known definitively by June 30, 2027, 11:59 PM ET, the market will resolve to \"Other\".\n\nThis market will resolve based on the result of the election, as indicated by a consensus of credible reporting. If there is ambiguity, this market will resolve based solely on the official results as reported by the Brazilian government, specifically the Superior Electoral Court (Tribunal Superior Eleitoral, TSE) (e.g., https://dadosabertos.tse.jus.br/).",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-romeu-zema-win-the-2026-brazilian-presidential-election-THlJ5kdmq5Ia.jpg",
+    "url": "https://polymarket.com/event/will-romeu-zema-finish-in-third-place-in-the-first-round-of-the-2026-brazilian-presidential-election",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.085,
+      0.915
+    ],
+    "volume": 998.518212,
+    "end_date": "2026-10-04T00:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0xf593ebad1e9d5b9bdacfe666601bd90188da6db990d597772f1d747299837b65",
+    "question": "Will BNB dip to $300 in March?",
+    "description": "This market will immediately resolve to \"Yes\" if any Binance 1 minute candle for BNB/USDT during the month specified in the title (from 00:00 AM ET on the first day to 11:59 PM ET on the last) has a final Low price equal to or lower than the price specified in the title. Otherwise, this market will resolve to \"No.\"\n\nThe resolution source for this market is Binance, specifically the BNB/USDT Low prices available at https://www.binance.com/en/trade/BNB_USDT, with the chart settings on \"1m\" for one-minute candles selected on the top bar.\n\nPlease note that the outcome of this market depends solely on the price data from the Binance BNB/USDT trading pair. Prices from other exchanges, different trading pairs, or spot markets will not be considered for the resolution of this market.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bnb-all-time-high-by-december-31-MRsmG1FSYuSN.png",
+    "url": "https://polymarket.com/event/will-bnb-dip-to-300-in-march",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.008,
+      0.992
+    ],
+    "volume": 9984.610809,
+    "end_date": "2026-04-01T04:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0xe02f2faa3061e73c0f1bb30efe399a351b4766165cce534900a98f5c43c013fb",
+    "question": "Will Starmer say \"Trump\" during the next Prime Minister's Questions event?",
+    "description": "Keir Starmer is scheduled to participate in the Prime Minister's Questions (PMQs) in the Commons Chamber in the Palace of Westminster on every Wednesday. (https://www.parliament.uk/visiting/visiting-and-tours/watch-committees-and-debates/prime-ministers-questions/).\n\nThis market will resolve to \"Yes\" if Keir Starmer says the listed term during the next Prime Minister's Question Time event he participates in. Otherwise, the market will resolve to \"No\".\n\nAny usage of the term regardless of context will count toward the resolution of this market.\n\nPluralization/possessive of the term will count toward the resolution of this market, however other forms will NOT count.\n\nInstances where the term is used in a compound word will count regardless of context (e.g. joyful is not a compound word for \"joy,\" however \"killjoy\" is a compounding of the words \"kill\" and \"joy\").\n\nIf this market requires a specified number of mentions of a person\u2019s first or last name, a full-name mention will count as one mention (e.g., if a market is about \u201cJoe / Biden 5+ times,\u201d a mention of \u201cJoe Biden\u201d will count once).\n\nAI-generated audio or video will not count toward this market's resolution.\n\nIf no such Prime Minister's Question Time event happens by April 30, 2026, 11:59 PM ET, this market will resolve to \"No\". If Starmer ceases to be Prime Minister for any length of time by April 30, 2026, 11:59 PM ET, this market will resolve to \"No\".\n\nThis market is explicitly about scheduled events featuring Keir Starmer titled \"Prime Minister's Question Time\" (https://www.parallelparliament.co.uk/mp/keir-starmer/dept/cabinet-office/calendar). Speeches, events, or comments that occur outside of named, scheduled events will not qualify toward this market's resolution. If the event contains a Q&A, it will count toward the resolution of this market.\n\nThe resolution source will be video of the events. Only remarks which are broadcast or streamed live will count toward this market's resolution.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/what-will-keir-starmer-say-at-the-next-prime-ministers-questions-event-TI7_wR1YP3O3.jpg",
+    "url": "https://polymarket.com/event/will-starmer-say-trump-during-the-next-prime-ministers-questions-event",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.585,
+      0.415
+    ],
+    "volume": 998.3368210000002,
+    "end_date": "2026-03-18T00:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0x0ce5fcb1c39729a332f35c3dd6f1b91e3c0c031605366fb62aa5a7aa866b0e08",
+    "question": "Will the price of Bitcoin be above $76,000 on March 18?",
+    "description": "This market will resolve to \"Yes\" if the Binance 1 minute candle for BTC/USDT 12:00 in the ET timezone (noon) on the date specified in the title has a final \"Close\" price higher than the price specified in the title. Otherwise, this market will resolve to \"No\".\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"Close\" prices currently available at https://www.binance.com/en/trade/BTC_USDT with \"1m\" and \"Candles\" selected on the top bar.\n\nPlease note that this market is about the price according to Binance BTC/USDT, not according to other exchanges or trading pairs.\n\nPrice precision is determined by the number of decimal places in the source.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+    "url": "https://polymarket.com/event/bitcoin-above-76k-on-march-18",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.105,
+      0.895
+    ],
+    "volume": 99807.29509599986,
+    "end_date": "2026-03-18T16:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0xe563417f1554295028487f40053056a79d880efc30b9fb0ddaefb967a7ee0da1",
+    "question": "Will xAI have the second best AI model at the end of June 2026?",
+    "description": "This market will resolve according to the company that owns the model with the second-highest arena score based on the Chatbot Arena LLM Leaderboard (https://lmarena.ai/) when the table under the \"Leaderboard\" tab is checked on June 30, 2026, 12:00 PM ET.\n\nResults from the \"Arena Score\" section on the Leaderboard tab of https://lmarena.ai/leaderboard/text with the style control off will be used to resolve this market.\n\nIf two models are tied for the second best arena score at this market's check time, resolution will be based on whichever company's name, as it is described in this market group, comes first in alphabetical order (e.g. if both were tied, \"Google\" would resolve to \"Yes\", and \"xAI\" would resolve to \"No\")\n\nThe resolution source for this market is the Chatbot Arena LLM Leaderboard found at https://lmarena.ai/. If this resolution source is unavailable at check time, this market will remain open until the leaderboard comes back online and resolve based on the first check after it becomes available. If it becomes permanently unavailable, this market will resolve based on another resolution source.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-xai-have-the-top-ai-model-on-february-28-u3iUE4o3SB1s.jpg",
+    "url": "https://polymarket.com/event/will-xai-have-the-second-best-ai-model-at-the-end-of-june-2026",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.065,
+      0.935
+    ],
+    "volume": 998.0248260000001,
+    "end_date": "2026-06-30T00:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0xcffa3251850bed05fc69f264c97df4e73450a8b2849d65045606755eb5da0c69",
+    "question": "XRP Up or Down - March 18, 5AM ET",
+    "description": "This market will resolve to \"Up\" if the close price is greater than or equal to the open price for the XRP/USDT 1 hour candle that begins on the time and date specified in the title. Otherwise, this market will resolve to \"Down\".\n\nThe resolution source for this market is information from Binance, specifically the XRP/USDT pair (https://www.binance.com/en/trade/XRP_USDT). The close \u00ab C \u00bb and open \u00ab O \u00bb displayed at the top of the graph for the relevant \"1H\" candle will be used once the data for that candle is finalized.\n\nPlease note that this market is about the price according to Binance XRP/USDT, not according to other exchanges or trading pairs.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/XRP-logo.png",
+    "url": "https://polymarket.com/event/xrp-up-or-down-march-18-2026-5am-et",
+    "outcomes": [
+      "Up",
+      "Down"
+    ],
+    "outcome_prices": [
+      0.5,
+      0.5
+    ],
+    "volume": 9.98,
+    "end_date": "2026-03-18T10:00:00+00:00",
+    "active": true
+  },
+  {
+    "condition_id": "0x6c79d6e55b76a215a79983466b57f9b76a152ac1911fa8094e1b1fe0d24c1a94",
+    "question": "Will the price of Bitcoin be above $70,000 on March 21?",
+    "description": "This market will resolve to \"Yes\" if the Binance 1 minute candle for BTC/USDT 12:00 in the ET timezone (noon) on the date specified in the title has a final \"Close\" price higher than the price specified in the title. Otherwise, this market will resolve to \"No\".\n\nThe resolution source for this market is Binance, specifically the BTC/USDT \"Close\" prices currently available at https://www.binance.com/en/trade/BTC_USDT with \"1m\" and \"Candles\" selected on the top bar.\n\nPlease note that this market is about the price according to Binance BTC/USDT, not according to other exchanges or trading pairs.\n\nPrice precision is determined by the number of decimal places in the source.",
+    "category": "",
+    "image_url": "https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png",
+    "url": "https://polymarket.com/event/bitcoin-above-70k-on-march-21",
+    "outcomes": [
+      "Yes",
+      "No"
+    ],
+    "outcome_prices": [
+      0.855,
+      0.145
+    ],
+    "volume": 9978.410894000013,
+    "end_date": "2026-03-21T16:00:00+00:00",
+    "active": true
+  }
+]

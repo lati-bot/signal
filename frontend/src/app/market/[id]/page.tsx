@@ -1,36 +1,213 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { ProbabilitySlider } from "@/components/ProbabilitySlider";
+import { FactorSliders } from "@/components/FactorSliders";
+
+interface Outcome {
+  name: string;
+  price: number;
+}
+
+interface CrossPlatform {
+  platform: string;
+  question: string;
+  yesPrice: number;
+  volume: number;
+  url: string;
+}
+
+interface MarketDetail {
+  id: string;
+  question: string;
+  description: string;
+  platform: string;
+  yesPrice: number;
+  volume: number;
+  category: string;
+  slug: string;
+  endDate: string | null;
+  image: string | null;
+  outcomes: Outcome[];
+  crossPlatform: CrossPlatform[];
+}
+
+function fmtVolume(v: number): string {
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
+  return `$${v.toFixed(0)}`;
+}
+
+function fmtDate(iso: string | null): string {
+  if (!iso) return "No end date";
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 export default function MarketDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  // In production, fetch from API. Placeholder for now.
+  const [market, setMarket] = useState<MarketDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/markets/${encodeURIComponent(params.id)}`)
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load market");
+        return r.json();
+      })
+      .then(setMarket)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto px-6 py-10">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-sand rounded w-24" />
+          <div className="h-8 bg-sand rounded w-3/4" />
+          <div className="h-40 bg-sand rounded" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !market) {
+    return (
+      <div className="max-w-3xl mx-auto px-6 py-10">
+        <a
+          href="/markets"
+          className="text-sm text-warm-500 hover:text-ink transition-colors"
+        >
+          &larr; Back to markets
+        </a>
+        <p className="mt-6 text-warm-600">
+          {error || "Market not found."}
+        </p>
+      </div>
+    );
+  }
+
+  const pct = Math.round(market.yesPrice * 100);
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <p className="text-sm text-warm-500 mb-2">Polymarket</p>
-      <h1 className="font-serif text-3xl mb-4">
-        Will [event] happen by [date]?
-      </h1>
+      <a
+        href="/markets"
+        className="text-sm text-warm-500 hover:text-ink transition-colors"
+      >
+        &larr; Back to markets
+      </a>
+
+      <div className="mt-6 mb-8">
+        <p className="text-xs text-warm-500 uppercase tracking-wide mb-2">
+          {market.category || market.platform}
+        </p>
+        <h1 className="font-serif text-2xl sm:text-3xl leading-snug mb-4">
+          {market.question}
+        </h1>
+      </div>
+
+      {/* Main probability + details */}
       <div className="border border-sand rounded-lg p-6 mb-6">
-        <ProbabilitySlider value={0.65} label="Yes" />
-        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+        <ProbabilitySlider value={market.yesPrice} label="Yes" />
+
+        {market.outcomes.length > 2 && (
+          <div className="mt-3 space-y-2">
+            {market.outcomes.slice(1).map((o) => (
+              <ProbabilitySlider
+                key={o.name}
+                value={o.price}
+                label={o.name}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="mt-5 flex flex-wrap gap-x-8 gap-y-2 text-sm">
           <div>
             <span className="text-warm-500">Volume</span>
-            <p className="font-mono">$1,234,567</p>
+            <p className="font-mono">{fmtVolume(market.volume)}</p>
           </div>
           <div>
             <span className="text-warm-500">Closes</span>
-            <p>Mar 30, 2026</p>
+            <p>{fmtDate(market.endDate)}</p>
+          </div>
+          <div>
+            <span className="text-warm-500">Source</span>
+            <p>{market.platform}</p>
           </div>
         </div>
       </div>
-      <div className="prose prose-warm">
-        <p className="text-warm-700 leading-relaxed">
-          Market description and resolution criteria would appear here,
-          pulled from the platform API.
-        </p>
-      </div>
+
+      {/* Cross-platform comparison */}
+      {market.crossPlatform.length > 0 && (
+        <div className="border border-sand rounded-lg p-6 mb-6">
+          <h2 className="font-serif text-lg mb-4">
+            Same event, other platforms
+          </h2>
+          <div className="space-y-4">
+            {market.crossPlatform.map((cp, i) => (
+              <div
+                key={i}
+                className="flex items-start justify-between gap-4"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-warm-500 mb-0.5">
+                    {cp.platform}
+                  </p>
+                  <p className="text-sm leading-snug line-clamp-2">
+                    {cp.question}
+                  </p>
+                  {cp.volume > 0 && (
+                    <p className="text-xs text-warm-500 mt-1">
+                      {fmtVolume(cp.volume)} volume
+                    </p>
+                  )}
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="font-mono text-xl">
+                    {Math.round(cp.yesPrice * 100)}%
+                  </p>
+                  <a
+                    href={cp.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-accent hover:text-accent-dark transition-colors"
+                  >
+                    View &rarr;
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Factor Sliders - the key feature */}
+      <FactorSliders
+        marketPrice={market.yesPrice}
+        category={market.category}
+      />
+
+      {/* Description */}
+      {market.description && (
+        <div className="mt-8 border-t border-sand pt-6">
+          <h2 className="font-serif text-lg mb-3">Resolution criteria</h2>
+          <p className="text-sm text-warm-600 leading-relaxed whitespace-pre-line">
+            {market.description.slice(0, 1500)}
+            {market.description.length > 1500 && "..."}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
