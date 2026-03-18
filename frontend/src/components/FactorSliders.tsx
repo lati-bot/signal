@@ -1,45 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-
-const FACTOR_MAP: Record<string, string[]> = {
-  Politics: [
-    "Polling Momentum",
-    "Economic Sentiment",
-    "Incumbent Advantage",
-    "Media Coverage",
-    "Legal / Regulatory Risk",
-  ],
-  Crypto: [
-    "Price Trend",
-    "Regulatory News",
-    "Institutional Adoption",
-    "Market Sentiment",
-    "Technical Indicators",
-  ],
-  Economics: [
-    "Historical Precedent",
-    "Fed Signaling",
-    "Market Sentiment",
-    "Data Trend",
-    "Expert Consensus",
-  ],
-  AI: [
-    "Technical Progress",
-    "Regulatory Landscape",
-    "Corporate Investment",
-    "Public Sentiment",
-    "Expert Consensus",
-  ],
-};
-
-const DEFAULT_FACTORS = [
-  "Historical Precedent",
-  "Expert Consensus",
-  "Public Sentiment",
-  "Time Remaining",
-  "Momentum",
-];
+import { generateFactors, type Factor } from "@/lib/factorEngine";
 
 const MAX_SHIFT = 0.15;
 
@@ -58,17 +20,21 @@ function sliderLabel(val: number): string {
 export function FactorSliders({
   marketPrice,
   category,
+  question,
 }: {
   marketPrice: number;
   category: string;
+  question?: string;
 }) {
-  const factors = FACTOR_MAP[category] || DEFAULT_FACTORS;
+  const factors = useMemo(
+    () => generateFactors(question || "", category),
+    [question, category]
+  );
   const [values, setValues] = useState<number[]>(factors.map(() => 0));
 
   const { estimate, edge } = useMemo(() => {
-    const weight = 1 / factors.length;
     const totalAdj = values.reduce(
-      (sum, v) => sum + v * weight * MAX_SHIFT,
+      (sum, v, i) => sum + v * (factors[i]?.weight ?? 0.2) * MAX_SHIFT,
       0
     );
     const est = clamp(marketPrice + totalAdj, 0.01, 0.99);
@@ -114,12 +80,10 @@ export function FactorSliders({
       {/* Result bar */}
       <div className="mb-8">
         <div className="relative h-3 bg-sand rounded-full overflow-hidden">
-          {/* Market price marker */}
           <div
             className="absolute top-0 h-full w-0.5 bg-warm-400 z-10"
             style={{ left: `${marketPct}%` }}
           />
-          {/* Your estimate fill */}
           <div
             className="h-full rounded-full transition-all duration-150"
             style={{
@@ -154,14 +118,17 @@ export function FactorSliders({
 
       {/* Factor sliders */}
       <div className="space-y-5">
-        {factors.map((name, i) => (
-          <div key={name}>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-sm text-warm-700">{name}</label>
+        {factors.map((factor, i) => (
+          <div key={factor.name}>
+            <div className="flex items-center justify-between mb-0.5">
+              <label className="text-sm text-warm-700">{factor.name}</label>
               <span className="text-xs text-warm-500 tabular-nums w-20 text-right">
                 {sliderLabel(values[i])}
               </span>
             </div>
+            <p className="text-[11px] text-warm-400 mb-1.5 leading-tight">
+              {factor.description}
+            </p>
             <div className="flex items-center gap-3">
               <span className="text-[10px] text-warm-400 shrink-0 w-8 text-right">
                 −2

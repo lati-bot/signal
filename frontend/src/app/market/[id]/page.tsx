@@ -169,6 +169,7 @@ export default function MarketDetailPage({
         <FactorSliders
           marketPrice={market.yesPrice}
           category={market.category}
+          question={market.question}
         />
       </div>
 

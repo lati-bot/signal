@@ -30,6 +30,12 @@ function fmtVolume(v: number): string {
   return `$${v.toFixed(0)}`;
 }
 
+const PLATFORM_COLORS: Record<string, { bg: string; text: string }> = {
+  Polymarket: { bg: "#e8eaf6", text: "#3949ab" },
+  Kalshi: { bg: "#fce4ec", text: "#c62828" },
+  Manifold: { bg: "#e8f5e9", text: "#2e7d32" },
+};
+
 function probColor(p: number): string {
   if (p >= 0.7) return "#5a8a5e";
   if (p >= 0.35) return "#b8860b";
@@ -212,6 +218,15 @@ export default function MarketsPage() {
                 <div className="flex items-start gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span
+                        className="text-[11px] px-1.5 py-0.5 rounded font-medium"
+                        style={{
+                          backgroundColor: PLATFORM_COLORS[m.platform]?.bg || "#f0f0f0",
+                          color: PLATFORM_COLORS[m.platform]?.text || "#666",
+                        }}
+                      >
+                        {m.platform}
+                      </span>
                       {m.category && (
                         <span className="text-[11px] text-warm-500 bg-warm-100 px-1.5 py-0.5 rounded">
                           {m.category}
