@@ -25,21 +25,24 @@ interface MarketDetail {
 }
 
 async function fetchPolymarket(id: string): Promise<MarketDetail | null> {
-  // Try by conditionId first, then slug
   let market: any = null;
 
+  // Try slug first (most common from our UI)
   const resp = await fetch(
-    `${GAMMA_BASE}/markets?condition_id=${encodeURIComponent(id)}&limit=1`,
+    `${GAMMA_BASE}/markets?slug=${encodeURIComponent(id)}&limit=1`,
     { next: { revalidate: 120 } }
   );
   if (resp.ok) {
     const data = await resp.json();
-    if (Array.isArray(data) && data.length > 0) market = data[0];
+    if (Array.isArray(data) && data.length > 0 && data[0].slug === id) {
+      market = data[0];
+    }
   }
 
-  if (!market) {
+  // Try conditionId if slug didn't match exactly
+  if (!market && id.startsWith("0x")) {
     const resp2 = await fetch(
-      `${GAMMA_BASE}/markets?slug=${encodeURIComponent(id)}&limit=1`,
+      `${GAMMA_BASE}/markets?condition_id=${encodeURIComponent(id)}&limit=1`,
       { next: { revalidate: 120 } }
     );
     if (resp2.ok) {
@@ -48,8 +51,8 @@ async function fetchPolymarket(id: string): Promise<MarketDetail | null> {
     }
   }
 
-  // Also try direct ID lookup
-  if (!market) {
+  // Try numeric ID
+  if (!market && /^\d+$/.test(id)) {
     const resp3 = await fetch(`${GAMMA_BASE}/markets/${encodeURIComponent(id)}`, {
       next: { revalidate: 120 },
     });

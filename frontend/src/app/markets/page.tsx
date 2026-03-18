@@ -220,7 +220,7 @@ export default function MarketsPage() {
             return (
               <Link
                 key={m.slug || m.id}
-                href={`/market/${m.slug || m.id}`}
+                href={`/market/${m.id}`}
                 className="block border border-sand rounded-lg p-4 sm:p-5 hover:border-warm-400 active:bg-warm-50 transition-colors"
               >
                 <div className="flex items-start gap-4">

@@ -62,7 +62,7 @@ async function fetchPolymarket(limit: string, q: string): Promise<NormalizedMark
       } catch {}
 
       return {
-        id: m.conditionId || m.condition_id || m.id || "",
+        id: String(m.id || m.conditionId || m.condition_id || ""),
         question: m.question,
         platform: "Polymarket",
         yesPrice: prices[0] ?? 0,
