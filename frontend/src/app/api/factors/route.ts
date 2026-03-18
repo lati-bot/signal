@@ -48,7 +48,7 @@ Only return the JSON array, nothing else.`,
           { role: "user", content: question },
         ],
         temperature: 0.3,
-        max_completion_tokens: 500,
+        max_completion_tokens: 1500,
       }),
       signal: AbortSignal.timeout(8000),
     });
