@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ProbabilitySlider } from "@/components/ProbabilitySlider";
 import { FactorSliders } from "@/components/FactorSliders";
@@ -50,12 +51,8 @@ function fmtDate(iso: string | null): string {
   });
 }
 
-export default function MarketDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = use(params);
+export default function MarketDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const [market, setMarket] = useState<MarketDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
