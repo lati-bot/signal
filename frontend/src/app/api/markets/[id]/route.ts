@@ -131,10 +131,11 @@ function guessCategory(question: string): string {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const market = await fetchPolymarket(params.id);
+    const { id } = await params;
+    const market = await fetchPolymarket(id);
     if (!market) {
       return NextResponse.json({ error: "Market not found" }, { status: 404 });
     }

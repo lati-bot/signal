@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
+import Link from "next/link";
 import { ProbabilitySlider } from "@/components/ProbabilitySlider";
 import { FactorSliders } from "@/components/FactorSliders";
 
@@ -51,14 +52,16 @@ function fmtDate(iso: string | null): string {
 export default function MarketDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
   const [market, setMarket] = useState<MarketDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/markets/${encodeURIComponent(params.id)}`)
+    fetch(`/api/markets/${encodeURIComponent(id)}`)
       .then((r) => {
         if (!r.ok) throw new Error("Failed to load market");
         return r.json();
@@ -66,11 +69,19 @@ export default function MarketDetailPage({
       .then(setMarket)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [params.id]);
+  }, [id]);
+
+  function shareMarket() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-10">
+      <div className="max-w-3xl mx-auto px-5 py-10">
         <div className="animate-pulse space-y-4">
           <div className="h-4 bg-sand rounded w-24" />
           <div className="h-8 bg-sand rounded w-3/4" />
@@ -82,13 +93,13 @@ export default function MarketDetailPage({
 
   if (error || !market) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-10">
-        <a
+      <div className="max-w-3xl mx-auto px-5 py-10">
+        <Link
           href="/markets"
           className="text-sm text-warm-500 hover:text-ink transition-colors"
         >
           &larr; Back to markets
-        </a>
+        </Link>
         <p className="mt-6 text-warm-600">
           {error || "Market not found."}
         </p>
@@ -99,35 +110,44 @@ export default function MarketDetailPage({
   const pct = Math.round(market.yesPrice * 100);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10">
-      <a
-        href="/markets"
-        className="text-sm text-warm-500 hover:text-ink transition-colors"
-      >
-        &larr; Back to markets
-      </a>
+    <div className="max-w-3xl mx-auto px-5 py-8">
+      <div className="flex items-center justify-between mb-6">
+        <Link
+          href="/markets"
+          className="text-sm text-warm-500 hover:text-ink transition-colors"
+        >
+          &larr; Markets
+        </Link>
+        <button
+          onClick={shareMarket}
+          className="text-sm text-warm-500 hover:text-ink transition-colors"
+        >
+          {copied ? "Copied!" : "Share"}
+        </button>
+      </div>
 
-      <div className="mt-6 mb-8">
-        <p className="text-xs text-warm-500 uppercase tracking-wide mb-2">
-          {market.category || market.platform}
-        </p>
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-[11px] text-warm-500 bg-warm-100 px-1.5 py-0.5 rounded">
+            {market.category || market.platform}
+          </span>
+          <span className="text-[11px] text-warm-400">
+            Closes {fmtDate(market.endDate)}
+          </span>
+        </div>
         <h1 className="font-serif text-2xl sm:text-3xl leading-snug mb-4">
           {market.question}
         </h1>
       </div>
 
-      {/* Main probability + details */}
-      <div className="border border-sand rounded-lg p-6 mb-6">
+      {/* Main probability */}
+      <div className="border border-sand rounded-lg p-5 sm:p-6 mb-4">
         <ProbabilitySlider value={market.yesPrice} label="Yes" />
 
         {market.outcomes.length > 2 && (
           <div className="mt-3 space-y-2">
             {market.outcomes.slice(1).map((o) => (
-              <ProbabilitySlider
-                key={o.name}
-                value={o.price}
-                label={o.name}
-              />
+              <ProbabilitySlider key={o.name} value={o.price} label={o.name} />
             ))}
           </div>
         )}
@@ -138,35 +158,32 @@ export default function MarketDetailPage({
             <p className="font-mono">{fmtVolume(market.volume)}</p>
           </div>
           <div>
-            <span className="text-warm-500">Closes</span>
-            <p>{fmtDate(market.endDate)}</p>
-          </div>
-          <div>
             <span className="text-warm-500">Source</span>
             <p>{market.platform}</p>
           </div>
         </div>
       </div>
 
+      {/* Factor Sliders — THE feature, prominent placement */}
+      <div className="mb-4">
+        <FactorSliders
+          marketPrice={market.yesPrice}
+          category={market.category}
+        />
+      </div>
+
       {/* Cross-platform comparison */}
       {market.crossPlatform.length > 0 && (
-        <div className="border border-sand rounded-lg p-6 mb-6">
+        <div className="border border-sand rounded-lg p-5 sm:p-6 mb-4">
           <h2 className="font-serif text-lg mb-4">
             Same event, other platforms
           </h2>
           <div className="space-y-4">
             {market.crossPlatform.map((cp, i) => (
-              <div
-                key={i}
-                className="flex items-start justify-between gap-4"
-              >
+              <div key={i} className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-warm-500 mb-0.5">
-                    {cp.platform}
-                  </p>
-                  <p className="text-sm leading-snug line-clamp-2">
-                    {cp.question}
-                  </p>
+                  <p className="text-xs text-warm-500 mb-0.5">{cp.platform}</p>
+                  <p className="text-sm leading-snug line-clamp-2">{cp.question}</p>
                   {cp.volume > 0 && (
                     <p className="text-xs text-warm-500 mt-1">
                       {fmtVolume(cp.volume)} volume
@@ -174,16 +191,14 @@ export default function MarketDetailPage({
                   )}
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="font-mono text-xl">
-                    {Math.round(cp.yesPrice * 100)}%
-                  </p>
+                  <p className="font-mono text-xl">{Math.round(cp.yesPrice * 100)}%</p>
                   <a
                     href={cp.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs text-accent hover:text-accent-dark transition-colors"
                   >
-                    View &rarr;
+                    Trade &rarr;
                   </a>
                 </div>
               </div>
@@ -191,12 +206,6 @@ export default function MarketDetailPage({
           </div>
         </div>
       )}
-
-      {/* Factor Sliders - the key feature */}
-      <FactorSliders
-        marketPrice={market.yesPrice}
-        category={market.category}
-      />
 
       {/* Description */}
       {market.description && (

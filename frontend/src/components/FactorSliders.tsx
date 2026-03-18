@@ -73,7 +73,7 @@ export function FactorSliders({
     );
     const est = clamp(marketPrice + totalAdj, 0.01, 0.99);
     return { estimate: est, edge: est - marketPrice };
-  }, [values, marketPrice, factors.length]);
+  }, [values, marketPrice, factors]);
 
   const marketPct = Math.round(marketPrice * 100);
   const estimatePct = Math.round(estimate * 100);
