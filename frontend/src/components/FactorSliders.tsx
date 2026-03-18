@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { generateFactors, type Factor } from "@/lib/factorEngine";
 
 const MAX_SHIFT = 0.15;
@@ -26,11 +26,48 @@ export function FactorSliders({
   category: string;
   question?: string;
 }) {
-  const factors = useMemo(
+  const fallbackFactors = useMemo(
     () => generateFactors(question || "", category),
     [question, category]
   );
-  const [values, setValues] = useState<number[]>(factors.map(() => 0));
+
+  const [factors, setFactors] = useState<Factor[]>(fallbackFactors);
+  const [loading, setLoading] = useState(true);
+  const [values, setValues] = useState<number[]>(fallbackFactors.map(() => 0));
+
+  useEffect(() => {
+    if (!question) {
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    fetch(
+      `/api/factors?question=${encodeURIComponent(question)}&category=${encodeURIComponent(category)}`,
+      { signal: controller.signal }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.factors?.length === 5) {
+          setFactors(data.factors);
+          setValues(data.factors.map(() => 0));
+        }
+      })
+      .catch(() => {
+        // Keep fallback factors
+      })
+      .finally(() => {
+        clearTimeout(timeout);
+        setLoading(false);
+      });
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [question, category]);
 
   const { estimate, edge } = useMemo(() => {
     const totalAdj = values.reduce(
@@ -74,7 +111,7 @@ export function FactorSliders({
         )}
       </div>
       <p className="text-sm text-warm-500 mb-6">
-        Adjust factors to estimate your own probability.
+        {loading ? "Analyzing market factors..." : "Adjust factors to estimate your own probability."}
       </p>
 
       {/* Result bar */}
@@ -117,7 +154,7 @@ export function FactorSliders({
       </div>
 
       {/* Factor sliders */}
-      <div className="space-y-5">
+      <div className={`space-y-5 ${loading ? "opacity-50 pointer-events-none" : ""}`}>
         {factors.map((factor, i) => (
           <div key={factor.name}>
             <div className="flex items-center justify-between mb-0.5">
