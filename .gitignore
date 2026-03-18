@@ -27,3 +27,4 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+frontend/.env.local
