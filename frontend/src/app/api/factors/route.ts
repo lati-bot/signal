@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const deployment = process.env.AZURE_OPENAI_DEPLOYMENT;
 
   if (!endpoint || !key || !deployment) {
-    return NextResponse.json({ factors: generateFactors(question, category), source: "keyword" });
+    return NextResponse.json({ factors: generateFactors(question, category), source: "keyword", env: { e: !!endpoint, k: !!key, d: !!deployment } });
   }
 
   try {
@@ -47,15 +47,14 @@ Only return the JSON array, nothing else.`,
           },
           { role: "user", content: question },
         ],
-        temperature: 0.3,
         max_completion_tokens: 4000,
       }),
       signal: AbortSignal.timeout(15000),
     });
 
     if (!res.ok) {
-      console.error(`Azure OpenAI error: ${res.status}`);
-      return NextResponse.json({ factors: generateFactors(question, category), source: "keyword" });
+      const errBody = await res.text().catch(() => "");
+      return NextResponse.json({ factors: generateFactors(question, category), source: "keyword", llmStatus: res.status, llmError: errBody.slice(0, 200) });
     }
 
     const data = await res.json();
@@ -86,8 +85,8 @@ Only return the JSON array, nothing else.`,
 
     cache.set(cacheKey, { factors, ts: Date.now() });
     return NextResponse.json({ factors, source: "llm" });
-  } catch (err) {
+  } catch (err: any) {
     console.error("LLM factor generation failed:", err);
-    return NextResponse.json({ factors: generateFactors(question, category), source: "keyword" });
+    return NextResponse.json({ factors: generateFactors(question, category), source: "keyword", error: err?.message || String(err) });
   }
 }
