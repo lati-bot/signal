@@ -2,6 +2,12 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import { Sparkline, SparklinePlaceholder } from "@/components/Sparkline";
+
+interface SparklinePoint {
+  timestamp: number;
+  price: number;
+}
 
 interface Market {
   id: string;
@@ -13,6 +19,8 @@ interface Market {
   slug: string;
   endDate: string | null;
   image: string | null;
+  sparkline?: SparklinePoint[];
+  priceChange24h?: number;
 }
 
 const CATEGORIES = ["All", "Politics", "Crypto", "Economics", "Sports", "AI", "General"];
@@ -253,15 +261,24 @@ export default function MarketsPage() {
                       {pct}%
                     </p>
                     <p className="text-[11px] text-warm-400 mt-0.5">Yes</p>
-                    {/* Mini probability bar */}
-                    <div className="w-12 h-1 bg-sand rounded-full mt-1.5 ml-auto overflow-hidden">
-                      <div
-                        className="h-full rounded-full"
-                        style={{
-                          width: `${pct}%`,
-                          backgroundColor: probColor(m.yesPrice),
-                        }}
-                      />
+                    {/* Sparkline + change */}
+                    <div className="mt-1.5 flex items-center gap-1.5 justify-end">
+                      {m.sparkline && m.sparkline.length > 1 ? (
+                        <Sparkline data={m.sparkline} width={80} height={24} />
+                      ) : m.platform === "Polymarket" ? (
+                        <SparklinePlaceholder width={80} height={24} />
+                      ) : null}
+                      {m.priceChange24h != null && Math.abs(m.priceChange24h) >= 0.005 && (
+                        <span
+                          className="text-[10px] font-mono"
+                          style={{
+                            color: m.priceChange24h > 0 ? "#2d6a4f" : "#9b2226",
+                          }}
+                        >
+                          {m.priceChange24h > 0 ? "+" : ""}
+                          {Math.round(m.priceChange24h * 100)}%
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

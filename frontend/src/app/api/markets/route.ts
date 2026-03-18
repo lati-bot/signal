@@ -4,6 +4,13 @@ const GAMMA_BASE = "https://gamma-api.polymarket.com";
 const MANIFOLD_BASE = "https://api.manifold.markets/v0";
 const KALSHI_BASE = "https://api.elections.kalshi.com/trade-api/v2";
 
+const CLOB_BASE = "https://clob.polymarket.com";
+
+interface SparklinePoint {
+  timestamp: number;
+  price: number;
+}
+
 interface NormalizedMarket {
   id: string;
   question: string;
@@ -14,6 +21,8 @@ interface NormalizedMarket {
   slug: string;
   endDate: string | null;
   image: string | null;
+  sparkline?: SparklinePoint[];
+  priceChange24h?: number;
 }
 
 async function fetchPolymarket(limit: string, q: string): Promise<NormalizedMarket[]> {
@@ -44,6 +53,14 @@ async function fetchPolymarket(limit: string, q: string): Promise<NormalizedMark
         ).map(Number);
       } catch {}
 
+      let clobTokenIds: string[] = [];
+      try {
+        clobTokenIds =
+          typeof m.clobTokenIds === "string"
+            ? JSON.parse(m.clobTokenIds)
+            : m.clobTokenIds || [];
+      } catch {}
+
       return {
         id: m.conditionId || m.condition_id || m.id || "",
         question: m.question,
@@ -54,6 +71,7 @@ async function fetchPolymarket(limit: string, q: string): Promise<NormalizedMark
         slug: m.slug || "",
         endDate: m.endDate || null,
         image: m.image || null,
+        _clobTokenId: clobTokenIds[0] || null,
       };
     });
 }
@@ -139,5 +157,59 @@ export async function GET(req: NextRequest) {
   // Sort by volume descending
   markets.sort((a, b) => b.volume - a.volume);
 
-  return NextResponse.json(markets);
+  // Fetch sparkline data for top 20 Polymarket markets
+  const polymarkets = markets.filter(
+    (m: any) => m.platform === "Polymarket" && m._clobTokenId
+  );
+  const sparklineTargets = polymarkets.slice(0, 20);
+
+  if (sparklineTargets.length > 0) {
+    const sparkResults = await Promise.allSettled(
+      sparklineTargets.map(async (m: any) => {
+        const resp = await fetch(
+          `${CLOB_BASE}/prices-history?market=${encodeURIComponent(m._clobTokenId)}&interval=1w&fidelity=60`,
+          { next: { revalidate: 900 } }
+        );
+        if (!resp.ok) return null;
+        const raw = await resp.json();
+        return {
+          slug: m.slug,
+          history: (raw.history || raw || []).map((p: any) => ({
+            timestamp: p.t,
+            price: Number(p.p),
+          })),
+        };
+      })
+    );
+
+    const sparkMap = new Map<string, SparklinePoint[]>();
+    sparkResults.forEach((r) => {
+      if (r.status === "fulfilled" && r.value && r.value.history.length > 1) {
+        sparkMap.set(r.value.slug, r.value.history);
+      }
+    });
+
+    markets.forEach((m) => {
+      const hist = sparkMap.get(m.slug);
+      if (hist) {
+        m.sparkline = hist;
+        // Calculate 24h price change
+        const now = hist[hist.length - 1].price;
+        // Find point closest to 24h ago
+        const oneDayAgo = hist[hist.length - 1].timestamp - 86400;
+        let closest = hist[0];
+        for (const pt of hist) {
+          if (Math.abs(pt.timestamp - oneDayAgo) < Math.abs(closest.timestamp - oneDayAgo)) {
+            closest = pt;
+          }
+        }
+        m.priceChange24h = now - closest.price;
+      }
+    });
+  }
+
+  // Clean internal fields
+  const clean = markets.map(({ _clobTokenId, ...rest }: any) => rest);
+
+  return NextResponse.json(clean);
 }

@@ -4,6 +4,7 @@ import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { ProbabilitySlider } from "@/components/ProbabilitySlider";
 import { FactorSliders } from "@/components/FactorSliders";
+import { PriceChart } from "@/components/PriceChart";
 
 interface Outcome {
   name: string;
@@ -59,6 +60,11 @@ export default function MarketDetailPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [priceHistory, setPriceHistory] = useState<
+    { timestamp: number; price: number }[]
+  >([]);
+  const [historyInterval, setHistoryInterval] = useState("1w");
+  const [historyLoading, setHistoryLoading] = useState(true);
 
   useEffect(() => {
     fetch(`/api/markets/${encodeURIComponent(id)}`)
@@ -70,6 +76,20 @@ export default function MarketDetailPage({
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [id]);
+
+  // Fetch price history
+  useEffect(() => {
+    setHistoryLoading(true);
+    fetch(
+      `/api/markets/${encodeURIComponent(id)}/history?interval=${historyInterval}`
+    )
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setPriceHistory(data);
+      })
+      .catch(() => {})
+      .finally(() => setHistoryLoading(false));
+  }, [id, historyInterval]);
 
   function shareMarket() {
     const url = window.location.href;
@@ -163,6 +183,18 @@ export default function MarketDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Price history chart */}
+      {market.platform === "Polymarket" && (
+        <div className="mb-4">
+          <PriceChart
+            data={priceHistory}
+            interval={historyInterval}
+            onIntervalChange={setHistoryInterval}
+            loading={historyLoading}
+          />
+        </div>
+      )}
 
       {/* Factor Sliders — THE feature, prominent placement */}
       <div className="mb-4">
