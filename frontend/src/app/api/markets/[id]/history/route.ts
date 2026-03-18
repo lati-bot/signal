@@ -4,7 +4,24 @@ const GAMMA_BASE = "https://gamma-api.polymarket.com";
 const CLOB_BASE = "https://clob.polymarket.com";
 
 async function getClobTokenId(marketId: string): Promise<string | null> {
-  // Try conditionId, slug, then direct ID
+  // Try numeric ID first (direct lookup)
+  if (/^\d+$/.test(marketId)) {
+    const resp = await fetch(`${GAMMA_BASE}/markets/${marketId}`, {
+      next: { revalidate: 300 },
+    });
+    if (resp.ok) {
+      const m = await resp.json();
+      if (m) {
+        let ids: string[] = [];
+        try {
+          ids = typeof m.clobTokenIds === "string" ? JSON.parse(m.clobTokenIds) : m.clobTokenIds || [];
+        } catch {}
+        if (ids.length > 0) return ids[0];
+      }
+    }
+  }
+
+  // Fallback: try conditionId, slug
   for (const param of ["condition_id", "slug"]) {
     const resp = await fetch(
       `${GAMMA_BASE}/markets?${param}=${encodeURIComponent(marketId)}&limit=1`,
